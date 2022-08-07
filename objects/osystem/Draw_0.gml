@@ -27,7 +27,7 @@ for(var i = 0; i < array_length(sub); i++) {
 	draw_line_width(line[0][0], line[0][1], line[1][0], line[1][1], 4);
 }
 
-draw_set_color(isPointInsidePolylines(mouse_x, mouse_y, sub) ? c_green : c_red);
+draw_set_color((getPointRelToPolylines(mouse_x, mouse_y, sub) == RelState.Inside) ? c_green : c_red);
 draw_circle(mouse_x, mouse_y, 8, false);
 
 draw_set_color(c_white);

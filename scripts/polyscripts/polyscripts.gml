@@ -120,23 +120,30 @@ function polylinesInterclip(_lines1, _lines2) {
 	return [clips1, clips2];
 }
 
-// 判断 (_x, _y) 是否在多边形边 _lines 内部，忽略了线段的上端
-function isPointInsidePolylines(_x, _y, _lines) {
+enum RelState { Inside = 0, Outside = 1, OnLeft = 2, onRight = 3 };
+
+// 得到 (_x, _y) 在多边形边 _lines 的哪里，返回 RelState
+function getPointRelToPolylines(_x, _y, _lines) {
 	var len = array_length(_lines);
-	var flag = false;
+	var flag = false, onLinesFlag = false;
 	for(var i = 0; i < len; i++) {
 		var line = _lines[i];
 		if _y <= min(line[0][1], line[1][1]) || _y > max(line[0][1], line[1][1])
 			continue;
 		var xx = line[0][0] + (_y - line[0][1]) * (line[1][0] - line[0][0]) / (line[1][1] - line[0][1]);
+		if xx == _x
+			onLinesFlag = true;
 		if xx < _x
 			flag = !flag;
 	}
-	return flag;
+	if onLinesFlag {
+		return flag ? RelState.onRight : RelState.OnLeft;
+	}
+	return flag ? RelState.Inside : RelState.Outside;
 }
 
-// 判断 (_x, _y) 是否刚好落在 _lines 上面
-function isPointOnPolylines(_x, _y, _lines) {
+// 判断 (_x, _y) 与 _lines 的边的关系
+/*function pointRelWithPolylines(_x, _y, _lines) {
 	var len = array_length(_lines);
 	for(var i = 0; i < len; i++) {
 		var line = _lines[i];
@@ -152,7 +159,7 @@ function isPointOnPolylines(_x, _y, _lines) {
 		}
 	}
 	return false;
-}
+}*/
 
 // 加框，_lines1 + _lines2
 function polylineAdd(_lines1, _lines2) {
@@ -163,14 +170,22 @@ function polylineAdd(_lines1, _lines2) {
 	for(var i = 0; i < len1; i++) {
 		var line = clips1[i];
 		var center = lineLerp(line, 0.5);
-		if !isPointInsidePolylines(center[0], center[1], _lines2)
-			array_push(result, line);
+		var rel = getPointRelToPolylines(center[0], center[1], _lines2);
+		if rel > 1 {	// 正好落在边上
+			var relSelf = getPointRelToPolylines(center[0], center[1], _lines1);
+			if relSelf == rel
+				array_push(result, line);
+		} else {	// 没有落在边上
+			if rel == RelState.Outside
+				array_push(result, line);
+		}
 	}
 	for(var i = 0; i < len2; i++) {
 		var line = clips2[i];
 		var center = lineLerp(line, 0.5);
-		if !isPointInsidePolylines(center[0], center[1], _lines1)
-			array_push(result, line)
+		var rel = getPointRelToPolylines(center[0], center[1], _lines1);
+		if rel == RelState.Outside
+			array_push(result, line);
 	}
 	return result;
 }
@@ -184,14 +199,22 @@ function polylineSub(_lines1, _lines2) {
 	for(var i = 0; i < len1; i++) {
 		var line = clips1[i];
 		var center = lineLerp(line, 0.5);
-		if !isPointInsidePolylines(center[0], center[1], _lines2) && !isPointOnPolylines(center[0], center[1], _lines2)
-			array_push(result, line);
+		var rel = getPointRelToPolylines(center[0], center[1], _lines2);
+		if rel > 1 {	// 正好落在边上
+			var relSelf = getPointRelToPolylines(center[0], center[1], _lines1);
+			if relSelf != rel
+				array_push(result, line);
+		} else {	//没有落在边上
+			if rel == RelState.Outside
+				array_push(result, line);
+		}
 	}
 	for(var i = 0; i < len2; i++) {
 		var line = clips2[i];
 		var center = lineLerp(line, 0.5);
-		if isPointInsidePolylines(center[0], center[1], _lines1)
-			array_push(result, line)
+		var rel = getPointRelToPolylines(center[0], center[1], _lines1);
+		if rel == RelState.Inside
+			array_push(result, line);
 	}
 	return result;
 }
