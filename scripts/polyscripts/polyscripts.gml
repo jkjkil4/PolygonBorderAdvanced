@@ -11,6 +11,10 @@ function rotatePoint(_point, _rot) {
 	var vcos = cos(_rot), vsin = sin(_rot);
 	return [_point[0] * vcos - _point[1] * vsin, _point[0] * vsin + _point[1] * vcos];
 }
+// 将点坐标保留两位小数
+function roundPoint(_point) {
+	return [round(_point[0] * 100) / 100, round(_point[1] * 100) / 100];	
+}
 
 // 传入多边形顶点，转为 多边形的边
 function vertsToLines(_verts, _x, _y, _rot) {
@@ -19,9 +23,9 @@ function vertsToLines(_verts, _x, _y, _rot) {
 		return [];
 	var res = [];
 	array_resize(res, len);
-	var prev = shiftPoint(rotatePoint(_verts[len - 1], _rot), _x, _y);
+	var prev = roundPoint(shiftPoint(rotatePoint(_verts[len - 1], _rot), _x, _y));
 	for(var i = 0, j = len - 1; i < len; j = i++) {
-		var cur = shiftPoint(rotatePoint(_verts[i], _rot), _x, _y);
+		var cur = roundPoint(shiftPoint(rotatePoint(_verts[i], _rot), _x, _y));
 		res[i] = [prev, cur];
 		prev = cur;
 	}
@@ -120,7 +124,7 @@ function polylinesInterclip(_lines1, _lines2) {
 	return [clips1, clips2];
 }
 
-enum RelState { Inside = 0, Outside = 1, OnLeft = 2, onRight = 3 };
+enum RelState { Inside = 0, Outside = 1, OnLeft = 2, OnRight = 3 };
 
 // 得到 (_x, _y) 在多边形边 _lines 的哪里，返回 RelState
 function getPointRelToPolylines(_x, _y, _lines) {
@@ -137,7 +141,7 @@ function getPointRelToPolylines(_x, _y, _lines) {
 			flag = !flag;
 	}
 	if onLinesFlag {
-		return flag ? RelState.onRight : RelState.OnLeft;
+		return flag ? RelState.OnRight : RelState.OnLeft;
 	}
 	return flag ? RelState.Inside : RelState.Outside;
 }
