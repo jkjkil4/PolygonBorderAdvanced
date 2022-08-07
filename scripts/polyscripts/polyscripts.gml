@@ -145,6 +145,10 @@ function getPointRelToPolylines(_x, _y, _lines) {
 	}
 	return flag ? RelState.Inside : RelState.Outside;
 }
+// getPointRelToPolylines 的封装
+function isPointInsidePolylines(_x, _y, _lines) {
+	return getPointRelToPolylines(_x, _y, _lines) == RelState.Inside;
+}
 
 // 加框，_lines1 + _lines2
 function polylineAdd(_lines1, _lines2) {
@@ -215,7 +219,36 @@ function mixPoly(_polys) {
 	return result;
 }
 
-// 判断 (_x, _y) 是否在 _polys 运算后所形成的多边形内部
-function isPointInsidePolys(_x, _y, _polys) {
-	return getPointRelToPolylines(_x, _y, mixPoly(_polys)) == RelState.Inside;
+// 寻找 (_x, _y) 到 _lines 最近处
+function limitPoint(_x, _y, _lines) {
+	var len = array_length(_lines);
+	if len == 0
+		return [_x, _y];
+	
+	var nearestPos, nearestDis = -1;
+	for(var i = 0; i < len; i++) {
+		var line = _lines[i];
+		if((line[0][0] - _x) * (line[0][0] - line[1][0]) + (line[0][1] - _y) * (line[0][1] - line[1][1]) < 0) {
+			var dis = point_distance(_x, _y, line[0][0], line[0][1]);
+			if(dis < nearestDis || nearestDis == -1) {
+				nearestDis = dis;
+				nearestPos = line[0];
+			}
+		} else if((line[1][0] - _x) * (line[1][0] - line[0][0]) + (line[1][1] - _y) * (line[1][1] - line[0][1]) < 0) {
+			var dis = point_distance(_x, _y, line[1][0], line[1][1]);
+			if(dis < nearestDis || nearestDis == -1) {
+				nearestDis = dis;
+				nearestPos = line[1];
+			}
+		} else {
+			var k = ((_y - line[0][1]) * (line[1][0] - line[0][0]) - (_x - line[0][0]) * (line[1][1] - line[0][1]))
+				/ (sqr(line[1][1] - line[0][1]) + sqr(line[1][0] - line[0][0]));
+			var dis = abs(k) * point_distance(line[0][0], line[0][1], line[1][0], line[1][1]);
+			if(dis < nearestDis || nearestDis == -1) {
+				nearestDis = dis;
+				nearestPos = [_x + k * (line[1][1] - line[0][1]), _y + k * (line[0][0] - line[1][0])];
+			}
+		}
+	}
+	return nearestPos;
 }
