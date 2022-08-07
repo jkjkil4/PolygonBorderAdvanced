@@ -135,6 +135,25 @@ function isPointInsidePolylines(_x, _y, _lines) {
 	return flag;
 }
 
+// 判断 (_x, _y) 是否刚好落在 _lines 上面
+function isPointOnPolylines(_x, _y, _lines) {
+	var len = array_length(_lines);
+	for(var i = 0; i < len; i++) {
+		var line = _lines[i];
+		if _y < min(line[0][1], line[1][1]) || _y > max(line[0][1], line[1][1])
+			continue;
+		if line[1][1] == line[0][1] {
+			if line[1][1] == _y && min(line[0][0], line[1][0]) <= _x && _x <= max(line[0][0], line[1][0])
+				return true;
+		} else {
+			var xx = line[0][0] + (_y - line[0][1]) * (line[1][0] - line[0][0]) / (line[1][1] - line[0][1]);
+			if xx == _x
+				return true;
+		}
+	}
+	return false;
+}
+
 // 加框，_lines1 + _lines2
 function polylineAdd(_lines1, _lines2) {
 	var clips = polylinesInterclip(_lines1, _lines2);
@@ -165,7 +184,7 @@ function polylineSub(_lines1, _lines2) {
 	for(var i = 0; i < len1; i++) {
 		var line = clips1[i];
 		var center = lineLerp(line, 0.5);
-		if !isPointInsidePolylines(center[0], center[1], _lines2)
+		if !isPointInsidePolylines(center[0], center[1], _lines2) && !isPointOnPolylines(center[0], center[1], _lines2)
 			array_push(result, line);
 	}
 	for(var i = 0; i < len2; i++) {
