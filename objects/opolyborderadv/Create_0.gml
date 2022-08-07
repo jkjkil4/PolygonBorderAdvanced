@@ -10,6 +10,14 @@
 verts = [];
 
 /*
+	旋转相关
+	rot 表示顺时针旋转的角度
+	rotSpeed 表示每步对rot的增量
+*/
+rot = 0;
+rotSpeed = 0;
+
+/*
 	operFlag表明该多边形框是“加框”还是“减框”
 	OF_Add 表示“加框”
 	OF_Sub 表示“减框”

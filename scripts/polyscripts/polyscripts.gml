@@ -146,25 +146,6 @@ function getPointRelToPolylines(_x, _y, _lines) {
 	return flag ? RelState.Inside : RelState.Outside;
 }
 
-// 判断 (_x, _y) 与 _lines 的边的关系
-/*function pointRelWithPolylines(_x, _y, _lines) {
-	var len = array_length(_lines);
-	for(var i = 0; i < len; i++) {
-		var line = _lines[i];
-		if _y < min(line[0][1], line[1][1]) || _y > max(line[0][1], line[1][1])
-			continue;
-		if line[1][1] == line[0][1] {
-			if line[1][1] == _y && min(line[0][0], line[1][0]) <= _x && _x <= max(line[0][0], line[1][0])
-				return true;
-		} else {
-			var xx = line[0][0] + (_y - line[0][1]) * (line[1][0] - line[0][0]) / (line[1][1] - line[0][1]);
-			if xx == _x
-				return true;
-		}
-	}
-	return false;
-}*/
-
 // 加框，_lines1 + _lines2
 function polylineAdd(_lines1, _lines2) {
 	var clips = polylinesInterclip(_lines1, _lines2);
@@ -236,5 +217,5 @@ function mixPoly(_polys) {
 
 // 判断 (_x, _y) 是否在 _polys 运算后所形成的多边形内部
 function isPointInsidePolys(_x, _y, _polys) {
-	return isPointInsidePolylines(_x, _y, mixPoly(_polys));
+	return getPointRelToPolylines(_x, _y, mixPoly(_polys)) == RelState.Inside;
 }
