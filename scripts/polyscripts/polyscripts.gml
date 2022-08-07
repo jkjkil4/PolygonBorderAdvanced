@@ -50,6 +50,7 @@ function lineCollision(_line1, _line2) {
 	return (alpha > 0 && alpha < 1) ? alpha : noone;
 }
 
+// _lines1 和 _lines2 互相切割
 function polylinesInterclip(_lines1, _lines2) {
 	// clips1 表示 _lines1 被 _lines2 分割后的结果
 	// clips2 表示 _lines2 被 _lines1 分割后的结果
@@ -174,4 +175,20 @@ function polylineSub(_lines1, _lines2) {
 			array_push(result, line)
 	}
 	return result;
+}
+
+// 遍历 _polys，应用 polylineAdd 和 polylineSub，返回运算后的多边形边
+function mixPoly(_polys) {
+	var len = array_length(_polys);
+	var result = [];
+	for(var i = 0; i < len; i++) {
+		var poly = _polys[i];
+		result = (poly.operFlag == OperateFlag.OF_Add ? polylineAdd : polylineSub)(result, vertsToLines(poly.verts, poly.x, poly.y, poly.rot));
+	}
+	return result;
+}
+
+// 判断 (_x, _y) 是否在 _polys 运算后所形成的多边形内部
+function isPointInsidePolys(_x, _y, _polys) {
+	return isPointInsidePolylines(_x, _y, mixPoly(_polys));
 }
