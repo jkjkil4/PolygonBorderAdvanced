@@ -7,6 +7,7 @@
     {"id":{"name":"polyPaintScripts","path":"scripts/polyPaintScripts/polyPaintScripts.yy",},"order":4,},
     {"id":{"name":"polyBasicScripts","path":"scripts/polyBasicScripts/polyBasicScripts.yy",},"order":1,},
     {"id":{"name":"oPolyBorderAdv","path":"objects/oPolyBorderAdv/oPolyBorderAdv.yy",},"order":0,},
+    {"id":{"name":"utilScripts","path":"scripts/utilScripts/utilScripts.yy",},"order":5,},
     {"id":{"name":"polyBooleanScripts","path":"scripts/polyBooleanScripts/polyBooleanScripts.yy",},"order":3,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
   ],

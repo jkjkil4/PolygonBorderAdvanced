@@ -1,7 +1,7 @@
 // 该代码块中包含了一些与多边形遮罩绘制有关的代码
 
 // 用于得到多边形的三角剖分
-function polylinesTriangulation(_verts) {
+function vertsTriangulation(_verts) {
 	var len = array_length(_verts);
 	if len < 3
 		return [];
@@ -67,4 +67,47 @@ function polylinesTriangulation(_verts) {
 	array_push(result, [verts[0], verts[1], verts[2]]);
 	
 	return result;
+}
+
+function clearAlpha(_alpha) {
+	gpu_set_colorwriteenable(false, false, false, true);
+	gpu_set_blendenable(false);
+	
+	draw_set_alpha(_alpha);
+	draw_rectangle(0, 0, surface_get_width(surface_get_target()), surface_get_height(surface_get_target()), false);	
+	
+	gpu_set_blendenable(true);
+	gpu_set_colorwriteenable(true, true, true, true);
+}
+
+// 用于更改surface的alpha以达到限制显示范围的目的（遮罩）
+// 传入参数:
+//	   _surf: 传入的surface，将会对其进行修改
+//     _x: 限制区域的横向偏移量，一般为多边形的x
+//	   _y: 限制区域的纵向偏移量，一般为多边形的y
+//     _rot: 限制区域的旋转角度（不是弧度），一般为多边形的rot
+//     _alpha: 填充的透明度，比如“加框”可以用1，“减框”可以用0 
+//	   _isFillAlpha: 是否将alpha全设为0，用于多个多边形叠加时，第一个传入true，其余传入false以叠加遮罩
+function replaceAlpha(_triangles, _x, _y, _rot, _alpha) {
+	// 一些设定
+	gpu_set_colorwriteenable(false, false, false, true);
+	gpu_set_blendenable(false);
+	
+	// 填充三角区域
+	draw_set_alpha(_alpha);
+	var len = array_length(_triangles);
+	draw_primitive_begin(pr_trianglelist);
+	for(var i = 0; i < len; i++) {	// 遍历所有的三角
+		var tri = _triangles[i];
+		for(var j = 0; j < 3; j++) {
+			var pos = shiftPoint(rotatePoint(tri[j], _rot), _x, _y);
+			draw_vertex(pos[0], pos[1]);
+		}
+	}
+	draw_primitive_end();
+	draw_set_alpha(1);
+	
+	// 恢复默认
+	gpu_set_blendenable(true);
+	gpu_set_colorwriteenable(true, true, true, true);
 }

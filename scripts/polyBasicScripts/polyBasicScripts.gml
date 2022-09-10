@@ -12,9 +12,9 @@ function shiftPoint(_point, _x, _y) {
 	return [_point[0] + _x, _point[1] + _y];	
 }
 // 点的旋转
-// 将 _point 绕原点顺时针旋转 _rot
+// 将 _point 绕原点顺时针旋转 _rot（角度）
 function rotatePoint(_point, _rot) {
-	var vcos = cos(_rot), vsin = sin(_rot);
+	var vcos = dcos(_rot), vsin = dsin(_rot);
 	return [_point[0] * vcos - _point[1] * vsin, _point[0] * vsin + _point[1] * vcos];
 }
 // 将点坐标保留两位小数
