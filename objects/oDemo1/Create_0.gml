@@ -1,3 +1,5 @@
+// 这是一个最基本的多边形限制框的例子
+
 // 在(700,400)处创建一个多边形
 poly = instance_create_depth(700, 400, 0, oPolyBorderAdv);
 // 设定多边形的顶点
