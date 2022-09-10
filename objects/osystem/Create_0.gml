@@ -1,4 +1,4 @@
-polyVerts1 = [
+/*polyVerts1 = [
 	[300, 200], [900, 50], [900, 600], [300, 600]
 ];
 polyLines1 = vertsToLines(polyVerts1, 0, 0, 0);
@@ -14,7 +14,11 @@ rot = 0;
 
 playerX = 0;
 playerY = 0;
+*/
 
 
+verts = [];
+lines = [];
+tris = [];
 
 

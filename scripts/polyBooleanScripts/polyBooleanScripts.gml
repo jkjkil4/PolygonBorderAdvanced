@@ -1,38 +1,8 @@
-// 线的lerp
-function lineLerp(_line, _alpha) {
-	return [lerp(_line[0][0], _line[1][0], _alpha), lerp(_line[0][1], _line[1][1], _alpha)];
-}
-// 点的平移
-function shiftPoint(_point, _x, _y) {
-	return [_point[0] + _x, _point[1] + _y];	
-}
-// 点的旋转
-function rotatePoint(_point, _rot) {
-	var vcos = cos(_rot), vsin = sin(_rot);
-	return [_point[0] * vcos - _point[1] * vsin, _point[0] * vsin + _point[1] * vcos];
-}
-// 将点坐标保留两位小数
-function roundPoint(_point) {
-	return [round(_point[0] * 100) / 100, round(_point[1] * 100) / 100];	
-}
+// 该代码块中包含了一些与多边形布尔运算有关的方法
+// 包含线相交的判断、多边形的切割和加减
 
-// 传入多边形顶点，转为 多边形的边
-function vertsToLines(_verts, _x, _y, _rot) {
-	var len = array_length(_verts);
-	if len == 0
-		return [];
-	var res = [];
-	array_resize(res, len);
-	var prev = roundPoint(shiftPoint(rotatePoint(_verts[len - 1], _rot), _x, _y));
-	for(var i = 0, j = len - 1; i < len; j = i++) {
-		var cur = roundPoint(shiftPoint(rotatePoint(_verts[i], _rot), _x, _y));
-		res[i] = [prev, cur];
-		prev = cur;
-	}
-	return res;
-}
-
-// 预判断线相交，还需 lineCollision 才能准确判断
+// 预判断线相交
+// 该方法仅判断了两条线的外围矩形，还需 lineCollision 才能准确判断
 function lineCollisionPre(_line1, _line2) {
 	return max(_line2[0][0], _line2[1][0]) >= min(_line1[0][0], _line1[1][0])
 		&& min(_line2[0][0], _line2[1][0]) <= max(_line1[0][0], _line1[1][0])
@@ -124,32 +94,6 @@ function polylinesInterclip(_lines1, _lines2) {
 	return [clips1, clips2];
 }
 
-enum RelState { Inside = 0, Outside = 1, OnLeft = 2, OnRight = 3 };
-
-// 得到 (_x, _y) 在多边形边 _lines 的哪里，返回 RelState
-function getPointRelToPolylines(_x, _y, _lines) {
-	var len = array_length(_lines);
-	var flag = false, onLinesFlag = false;
-	for(var i = 0; i < len; i++) {
-		var line = _lines[i];
-		if _y <= min(line[0][1], line[1][1]) || _y > max(line[0][1], line[1][1])
-			continue;
-		var xx = line[0][0] + (_y - line[0][1]) * (line[1][0] - line[0][0]) / (line[1][1] - line[0][1]);
-		if xx == _x
-			onLinesFlag = true;
-		if xx < _x
-			flag = !flag;
-	}
-	if onLinesFlag {
-		return flag ? RelState.OnRight : RelState.OnLeft;
-	}
-	return flag ? RelState.Inside : RelState.Outside;
-}
-// getPointRelToPolylines 的封装
-function isPointInsidePolylines(_x, _y, _lines) {
-	return getPointRelToPolylines(_x, _y, _lines) == RelState.Inside;
-}
-
 // 加框，_lines1 + _lines2
 function polylineAdd(_lines1, _lines2) {
 	var clips = polylinesInterclip(_lines1, _lines2);
@@ -217,38 +161,4 @@ function mixPoly(_polys) {
 		result = (poly.operFlag == OperateFlag.OF_Add ? polylineAdd : polylineSub)(result, vertsToLines(poly.verts, poly.x, poly.y, poly.rot));
 	}
 	return result;
-}
-
-// 寻找 (_x, _y) 到 _lines 最近处
-function limitPoint(_x, _y, _lines) {
-	var len = array_length(_lines);
-	if len == 0
-		return [_x, _y];
-	
-	var nearestPos, nearestDis = -1;
-	for(var i = 0; i < len; i++) {
-		var line = _lines[i];
-		if((line[0][0] - _x) * (line[0][0] - line[1][0]) + (line[0][1] - _y) * (line[0][1] - line[1][1]) < 0) {
-			var dis = point_distance(_x, _y, line[0][0], line[0][1]);
-			if(dis < nearestDis || nearestDis == -1) {
-				nearestDis = dis;
-				nearestPos = line[0];
-			}
-		} else if((line[1][0] - _x) * (line[1][0] - line[0][0]) + (line[1][1] - _y) * (line[1][1] - line[0][1]) < 0) {
-			var dis = point_distance(_x, _y, line[1][0], line[1][1]);
-			if(dis < nearestDis || nearestDis == -1) {
-				nearestDis = dis;
-				nearestPos = line[1];
-			}
-		} else {
-			var k = ((_y - line[0][1]) * (line[1][0] - line[0][0]) - (_x - line[0][0]) * (line[1][1] - line[0][1]))
-				/ (sqr(line[1][1] - line[0][1]) + sqr(line[1][0] - line[0][0]));
-			var dis = abs(k) * point_distance(line[0][0], line[0][1], line[1][0], line[1][1]);
-			if(dis < nearestDis || nearestDis == -1) {
-				nearestDis = dis;
-				nearestPos = [_x + k * (line[1][1] - line[0][1]), _y + k * (line[0][0] - line[1][0])];
-			}
-		}
-	}
-	return nearestPos;
 }
