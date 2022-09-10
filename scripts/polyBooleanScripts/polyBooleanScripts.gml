@@ -25,6 +25,7 @@ function lineCollision(_line1, _line2) {
 }
 
 // _lines1 和 _lines2 互相切割
+// 该结果将会被用于布尔运算，也就是“加框”和“减框”
 function polylinesInterclip(_lines1, _lines2) {
 	// clips1 表示 _lines1 被 _lines2 分割后的结果
 	// clips2 表示 _lines2 被 _lines1 分割后的结果
@@ -153,6 +154,8 @@ function polylineSub(_lines1, _lines2) {
 }
 
 // 遍历 _polys，应用 polylineAdd 和 polylineSub，返回运算后的多边形边
+// 传入参数:
+//     _polys: 数组，每个元素是一个oPolyBorderAdv实例
 function mixPoly(_polys) {
 	var result = [];
 	for(var i = 0; i < array_length(_polys); i++) {

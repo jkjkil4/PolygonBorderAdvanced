@@ -1,5 +1,12 @@
 // 该代码块中包含了一些与多边形绘制有关的代码
 
+// 用于通过多边形顶点列表绘制多边形
+// 传入参数:
+//     _verts: 多边形的顶点
+//     _x: 多边形的x
+//     _y: 多边形的y
+//     _rot: 绕(_x,_y)顺时针旋转角度
+//     _width: 线粗细
 function drawPolyByVerts(_verts, _x, _y, _rot, _width) {
 	var len = array_length(_verts);
 	if len < 2
@@ -11,7 +18,10 @@ function drawPolyByVerts(_verts, _x, _y, _rot, _width) {
 		prev = pos;
 	}
 }
+// 对 drawPolyByVerts 的封装，可以直接传入多边形实例来绘制
 function drawPoly(_poly, _width) { drawPolyByVerts(_poly.verts, _poly.x, _poly.y, _poly.rot, _width); }
+// 用于通过多边形的边来绘制多边形
+// 与 drawPolyByVerts 大同小异，不再赘述
 function drawPolyByLines(_lines, _x, _y, _width) {
 	for(var i = 0; i < array_length(_lines); i++) {
 		var line = _lines[i];
@@ -20,6 +30,9 @@ function drawPolyByLines(_lines, _x, _y, _width) {
 }
 
 // 用于得到多边形的三角剖分
+// 三角剖分就是将一个多边形用多个三角形进行表示
+// 传入参数:
+//     _verts: 多边形的顶点列表
 function vertsTriangulation(_verts) {
 	var len = array_length(_verts);
 	if len < 3
@@ -88,6 +101,9 @@ function vertsTriangulation(_verts) {
 	return result;
 }
 
+// 用于将当前表面的透明度设置为特定值
+// 传入参数:
+//     _alpha: 设定的透明度
 function clearAlpha(_alpha) {
 	gpu_set_colorwriteenable(false, false, false, true);
 	gpu_set_blendenable(false);
@@ -101,7 +117,7 @@ function clearAlpha(_alpha) {
 
 // 用于更改surface的alpha以达到限制显示范围的目的（遮罩）
 // 传入参数:
-//	   _surf: 传入的surface，将会对其进行修改
+//	   _triangles: 传入的三角剖分，将会参照其进行透明度的修改
 //     _x: 限制区域的横向偏移量，一般为多边形的x
 //	   _y: 限制区域的纵向偏移量，一般为多边形的y
 //     _rot: 限制区域的旋转角度（不是弧度），一般为多边形的rot
@@ -130,6 +146,14 @@ function replaceAlpha(_triangles, _x, _y, _rot, _alpha) {
 	gpu_set_colorwriteenable(true, true, true, true);
 }
 
+// 用于通过传入的_polys进行遮罩
+// 传入参数:
+//     _polys: 数组，每个元素是一个oPolyBorderAdv实例
+//     _xOffset: x偏移量，默认为0
+//     _yOffset: y偏移量，默认为0
+//     _clearAlpha: 清空时的透明度，默认为0
+//     _addAlpha: “加框”时的透明度，默认为1
+//     _subAlpha: “减框”时的透明度，默认为0
 function mixAlpha(_polys, _xOffset = 0, _yOffset = 0, _clearAlpha = 0, _addAlpha = 1, _subAlpha = 0) {
 	clearAlpha(_clearAlpha);
 	for(var i = 0; i < array_length(_polys); i++) {

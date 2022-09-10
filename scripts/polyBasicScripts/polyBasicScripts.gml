@@ -3,6 +3,9 @@
 // 还有 点和多边形关系 的判断
 
 // 线的lerp
+// 传入参数:
+//     _line: 线段
+//     _alpha: 占线段的比例（比如：若为0，则返回_line[0]；若为1，则返回_line[1]；否则通过插值返回_line上的一个点）
 function lineLerp(_line, _alpha) {
 	return [lerp(_line[0][0], _line[1][0], _alpha), lerp(_line[0][1], _line[1][1], _alpha)];
 }
@@ -23,6 +26,11 @@ function roundPoint(_point) {
 }
 
 // 传入多边形顶点，转为 多边形的边
+// 传入参数:
+//     _verts: 多边形的顶点
+//     _x: 多边形的x
+//     _y: 多边形的y
+//     _rot: 绕(_x,_y)顺时针旋转角度
 function vertsToLines(_verts, _x, _y, _rot) {
 	var len = array_length(_verts);
 	if len == 0
@@ -38,9 +46,20 @@ function vertsToLines(_verts, _x, _y, _rot) {
 	return res;
 }
 
+// 枚举点与多边形边的相对关系，用于 getPointRelToPolylines
+// Inside: 位于多边形内部
+// Outside: 位于多边形外部
+// OnLeft: 刚好落在多边形左侧的边上
+// OnRight: 刚好落在多边形右侧的边上
+// 区分左右，是为了进行一些边界条件的判断
 enum RelState { Inside = 0, Outside = 1, OnLeft = 2, OnRight = 3 };
 
 // 得到 (_x, _y) 在多边形边 _lines 的哪里，返回 RelState
+// 传入参数:
+//     _x: 要判断的点的x
+//     _y: 要判断的点的y
+//     _lines: 多边形边
+//     _fn: 请忽略，仅用于 vertsTriangulation 中便捷地将点映射到边
 function getPointRelToPolylines(_x, _y, _lines, _fn = undefined) {
 	var len = array_length(_lines);
 	var flag = false, onLinesFlag = false;
@@ -65,6 +84,10 @@ function isPointInsidePolylines(_x, _y, _lines, _fn = undefined) {
 }
 
 // 寻找 (_x, _y) 到 _lines 最近处
+// 传入参数:
+//     _x: 要限制的点的x
+//     _y: 要限制的点的y
+//     _lines: 多边形边
 function limitPoint(_x, _y, _lines) {
 	var len = array_length(_lines);
 	if len == 0
