@@ -8,8 +8,9 @@
 		当在拐角移动时，可能穿过拐角（不会出框，原本是要绕过去）
 		只能限制点（对于较小的物体实际上也可以当成一个点）
 		编辑不便
-	说明文档:
-		https://gitee.com/jkjkil4/PolygonBorderAdvanced
+	说明文档（都可以）:
+		https://gitee.com/jkjkil4/PolygonBorderAdvanced/blob/master/README.md
+		https://github.com/jkjkil4/PolygonBorderAdvanced/blob/master/README.md
 	如果你需要移植到别的项目中，以下是你需要迁移的:
 		oPolyBorderAdv、polyBasicScripts、polyBooleanScripts、polyPaintScripts
 */
