@@ -4,11 +4,13 @@
   "name": "PolygonBorderAdvanced",
   "resources": [
     {"id":{"name":"oSystem","path":"objects/oSystem/oSystem.yy",},"order":2,},
+    {"id":{"name":"oDemo2","path":"objects/oDemo2/oDemo2.yy",},"order":1,},
     {"id":{"name":"polyPaintScripts","path":"scripts/polyPaintScripts/polyPaintScripts.yy",},"order":2,},
     {"id":{"name":"polyBasicScripts","path":"scripts/polyBasicScripts/polyBasicScripts.yy",},"order":0,},
     {"id":{"name":"rDemo1","path":"rooms/rDemo1/rDemo1.yy",},"order":0,},
     {"id":{"name":"oDemo1","path":"objects/oDemo1/oDemo1.yy",},"order":1,},
     {"id":{"name":"oPolyBorderAdv","path":"objects/oPolyBorderAdv/oPolyBorderAdv.yy",},"order":0,},
+    {"id":{"name":"rDemo2","path":"rooms/rDemo2/rDemo2.yy",},"order":0,},
     {"id":{"name":"utilScripts","path":"scripts/utilScripts/utilScripts.yy",},"order":3,},
     {"id":{"name":"polyBooleanScripts","path":"scripts/polyBooleanScripts/polyBooleanScripts.yy",},"order":1,},
     {"id":{"name":"rInit","path":"rooms/rInit/rInit.yy",},"order":7,},
@@ -29,12 +31,14 @@
   "RoomOrderNodes": [
     {"roomId":{"name":"rInit","path":"rooms/rInit/rInit.yy",},},
     {"roomId":{"name":"rDemo1","path":"rooms/rDemo1/rDemo1.yy",},},
+    {"roomId":{"name":"rDemo2","path":"rooms/rDemo2/rDemo2.yy",},},
   ],
   "Folders": [
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Main","folderPath":"folders/Main.yy","order":11,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Demos","folderPath":"folders/Main/Demos.yy","order":6,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Demo1","folderPath":"folders/Main/Demos/Demo1.yy","order":1,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Scripts","folderPath":"folders/Main/Scripts.yy","order":8,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Demo2","folderPath":"folders/Main/Demos/Demo2.yy","order":2,},
   ],
   "AudioGroups": [
     {"resourceType":"GMAudioGroup","resourceVersion":"1.3","name":"audiogroup_default","targets":-1,},

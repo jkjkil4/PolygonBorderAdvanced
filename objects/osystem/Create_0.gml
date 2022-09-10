@@ -20,7 +20,7 @@ playerY = 0;
 surf = surface_create(viewW(), viewH());
 */
 
-demos = [rDemo1];
+demos = [rDemo1, rDemo2];
 ind = 0;
 
 room_goto(rDemo1);

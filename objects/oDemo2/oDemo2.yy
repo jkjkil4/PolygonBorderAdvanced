@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "oDemo1",
+  "name": "oDemo2",
   "spriteId": null,
   "solid": false,
   "visible": true,
@@ -30,7 +30,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Demo1",
-    "path": "folders/Main/Demos/Demo1.yy",
+    "name": "Demo2",
+    "path": "folders/Main/Demos/Demo2.yy",
   },
 }

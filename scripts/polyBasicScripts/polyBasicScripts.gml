@@ -64,7 +64,7 @@ function getPointRelToPolylines(_x, _y, _lines, _fn = undefined) {
 	var len = array_length(_lines);
 	var flag = false, onLinesFlag = false;
 	for(var i = 0; i < len; i++) {
-		var line = _fn == undefined ? _lines[i] : _fn(i, _lines);
+		var line = is_undefined(_fn) ? _lines[i] : _fn(i, _lines);
 		if _y <= min(line[0][1], line[1][1]) || _y > max(line[0][1], line[1][1])
 			continue;
 		var xx = line[0][0] + (_y - line[0][1]) * (line[1][0] - line[0][0]) / (line[1][1] - line[0][1]);
@@ -96,13 +96,17 @@ function limitPoint(_x, _y, _lines) {
 	var nearestPos, nearestDis = -1;
 	for(var i = 0; i < len; i++) {
 		var line = _lines[i];
-		if((line[0][0] - _x) * (line[0][0] - line[1][0]) + (line[0][1] - _y) * (line[0][1] - line[1][1]) < 0) {
+		// 若该线段没有长度，则跳过
+		if line[0][0] == line[1][0] && line[0][1] == line[1][1]
+			continue;
+		// 根据情况计算 dis，进行比较
+		if (line[0][0] - _x) * (line[0][0] - line[1][0]) + (line[0][1] - _y) * (line[0][1] - line[1][1]) < 0 {
 			var dis = point_distance(_x, _y, line[0][0], line[0][1]);
 			if(dis < nearestDis || nearestDis == -1) {
 				nearestDis = dis;
 				nearestPos = line[0];
 			}
-		} else if((line[1][0] - _x) * (line[1][0] - line[0][0]) + (line[1][1] - _y) * (line[1][1] - line[0][1]) < 0) {
+		} else if (line[1][0] - _x) * (line[1][0] - line[0][0]) + (line[1][1] - _y) * (line[1][1] - line[0][1]) < 0 {
 			var dis = point_distance(_x, _y, line[1][0], line[1][1]);
 			if(dis < nearestDis || nearestDis == -1) {
 				nearestDis = dis;
@@ -112,7 +116,7 @@ function limitPoint(_x, _y, _lines) {
 			var k = ((_y - line[0][1]) * (line[1][0] - line[0][0]) - (_x - line[0][0]) * (line[1][1] - line[0][1]))
 				/ (sqr(line[1][1] - line[0][1]) + sqr(line[1][0] - line[0][0]));
 			var dis = abs(k) * point_distance(line[0][0], line[0][1], line[1][0], line[1][1]);
-			if(dis < nearestDis || nearestDis == -1) {
+			if dis < nearestDis || nearestDis == -1 {
 				nearestDis = dis;
 				nearestPos = [_x + k * (line[1][1] - line[0][1]), _y + k * (line[0][0] - line[1][0])];
 			}

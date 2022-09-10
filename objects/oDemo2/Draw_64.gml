@@ -1,0 +1,1 @@
+draw_text(0, viewH() / 2, "x:" + string(playerX) + " y:" + string(playerY));

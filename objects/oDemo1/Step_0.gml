@@ -1,3 +1,6 @@
+// 将顶点转为边
+lines = vertsToLines(poly.verts, poly.x, poly.y, poly.rot);
+
 // 玩家移动
 playerX += (keyboard_check(ord("D")) - keyboard_check(ord("A"))) * 8;
 playerY += (keyboard_check(ord("S")) - keyboard_check(ord("W"))) * 8;
