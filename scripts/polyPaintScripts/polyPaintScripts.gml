@@ -87,7 +87,6 @@ function clearAlpha(_alpha) {
 //	   _y: 限制区域的纵向偏移量，一般为多边形的y
 //     _rot: 限制区域的旋转角度（不是弧度），一般为多边形的rot
 //     _alpha: 填充的透明度，比如“加框”可以用1，“减框”可以用0 
-//	   _isFillAlpha: 是否将alpha全设为0，用于多个多边形叠加时，第一个传入true，其余传入false以叠加遮罩
 function replaceAlpha(_triangles, _x, _y, _rot, _alpha) {
 	// 一些设定
 	gpu_set_colorwriteenable(false, false, false, true);
@@ -110,4 +109,16 @@ function replaceAlpha(_triangles, _x, _y, _rot, _alpha) {
 	// 恢复默认
 	gpu_set_blendenable(true);
 	gpu_set_colorwriteenable(true, true, true, true);
+}
+
+function mixAlpha(_polys, _xOffset, _yOffset, _clearAlpha = 0, _addAlpha = 1, _subAlpha = 0) {
+	var len = array_length(_polys);
+	clearAlpha(_clearAlpha);
+	for(var i = 0; i < len; i++) {
+		var poly = _polys[i];
+		replaceAlpha(
+			poly.triangles, _xOffset + poly.x, _yOffset + poly.y, poly.rot, 
+			poly.operFlag == OperateFlag.OF_Add ? _addAlpha : _subAlpha
+		);
+	}
 }

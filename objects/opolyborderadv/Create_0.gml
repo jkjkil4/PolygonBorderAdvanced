@@ -7,8 +7,18 @@
 		[-40, 40], [40, 40]
 	]
 	但是最好不要在这里修改，请在 Instance Creation Code 或者从其他实例控制这些内容
+	
+	如果你修改了verts的内容，你需要
+	调用 updateLines() 更新 lines
+	调用 updateTriangles() 更新 triangles （如果你不需要多边形遮罩，可以不用）
 */
 verts = [];
+
+lines = [];
+function updateLines() { lines = vertsToLines(verts); }
+
+triangles = [];
+function updateTriangles() { triangles = vertsTriangulation(verts); }
 
 /*
 	旋转相关
