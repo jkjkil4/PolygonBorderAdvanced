@@ -12,8 +12,6 @@ poly.verts = [
 ];
 // 设定多边形的转速
 poly.rotSpeed = 0.5;
-// 记录多边形的边（因为是单个多边形所以这么做，后面的例子就是用mixPoly了）
-lines = [];
 
 // 玩家的坐标
 playerX = 0;
