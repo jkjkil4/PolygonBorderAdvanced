@@ -37,12 +37,6 @@ mixed = [];
 
 // 用于遮罩的 surface
 surf = surface_create(viewW(), viewH());
-function repaintSurf() {
-	surface_set_target(surf);
-	draw_clear(c_fuchsia);
-	surface_reset_target();
-}
-repaintSurf();
 
 // 玩家的坐标
 playerX = 0;
