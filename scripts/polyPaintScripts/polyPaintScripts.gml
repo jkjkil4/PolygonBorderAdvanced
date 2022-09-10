@@ -1,4 +1,23 @@
-// 该代码块中包含了一些与多边形遮罩绘制有关的代码
+// 该代码块中包含了一些与多边形绘制有关的代码
+
+function drawPolyByVerts(_verts, _x, _y, _rot, _width) {
+	var len = array_length(_verts);
+	if len < 2
+		return;
+	var prev = rotatePoint(_verts[len - 1], _rot);
+	for(var i = 0; i < len; i++) {
+		var pos = rotatePoint(_verts[i], _rot);
+		draw_line_width(prev[0] + _x, prev[1] + _y, pos[0] + _x, pos[1] + _y, _width);
+		prev = pos;
+	}
+}
+function drawPoly(_poly, _width) { drawPolyByVerts(_poly.verts, _poly.x, _poly.y, _poly.rot, _width); }
+function drawPolyByLines(_lines, _x, _y, _width) {
+	for(var i = 0; i < array_length(_lines); i++) {
+		var line = _lines[i];
+		draw_line_width(line[0][0] + _x, line[0][1] + _y, line[1][0] + _x, line[1][1] + _y, _width);	
+	}
+}
 
 // 用于得到多边形的三角剖分
 function vertsTriangulation(_verts) {
@@ -111,10 +130,9 @@ function replaceAlpha(_triangles, _x, _y, _rot, _alpha) {
 	gpu_set_colorwriteenable(true, true, true, true);
 }
 
-function mixAlpha(_polys, _xOffset, _yOffset, _clearAlpha = 0, _addAlpha = 1, _subAlpha = 0) {
-	var len = array_length(_polys);
+function mixAlpha(_polys, _xOffset = 0, _yOffset = 0, _clearAlpha = 0, _addAlpha = 1, _subAlpha = 0) {
 	clearAlpha(_clearAlpha);
-	for(var i = 0; i < len; i++) {
+	for(var i = 0; i < array_length(_polys); i++) {
 		var poly = _polys[i];
 		replaceAlpha(
 			poly.triangles, _xOffset + poly.x, _yOffset + poly.y, poly.rot, 

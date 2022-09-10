@@ -154,9 +154,8 @@ function polylineSub(_lines1, _lines2) {
 
 // 遍历 _polys，应用 polylineAdd 和 polylineSub，返回运算后的多边形边
 function mixPoly(_polys) {
-	var len = array_length(_polys);
 	var result = [];
-	for(var i = 0; i < len; i++) {
+	for(var i = 0; i < array_length(_polys); i++) {
 		var poly = _polys[i];
 		result = (poly.operFlag == OperateFlag.OF_Add ? polylineAdd : polylineSub)(result, vertsToLines(poly.verts, poly.x, poly.y, poly.rot));
 	}

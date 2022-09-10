@@ -1,20 +1,18 @@
-polyVerts1 = [
+poly1 = instance_create_depth(0, 0, 0, oPolyBorderAdv);
+poly1.verts = [
 	[300, 200], [900, 50], [900, 600], [300, 600]
 ];
-polyLines1 = vertsToLines(polyVerts1, 0, 0, 0);
-polyTriangles1 = vertsTriangulation(polyVerts1);
+poly1.updateTriangles();
 
-polyVerts2 = [
+poly2 = instance_create_depth(0, 0, 0, oPolyBorderAdv);
+poly2.verts = [
 	[-100, -100], [100, -100], [100, 100], [-100, 100]
 ];
-polyLines2 = []
-polyTriangles2 = vertsTriangulation(polyVerts2);
-x2 = 0;
-y2 = 0;
+poly2.rotSpeed = 1;
+//poly2.operFlag = OperateFlag.OF_Sub;
+poly2.updateTriangles();
 
-sub = []
-
-rot = 0;
+mixed = []
 
 playerX = 0;
 playerY = 0;

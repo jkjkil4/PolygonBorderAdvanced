@@ -8,14 +8,10 @@
 	]
 	但是最好不要在这里修改，请在 Instance Creation Code 或者从其他实例控制这些内容
 	
-	如果你修改了verts的内容，你需要
-	调用 updateLines() 更新 lines
-	调用 updateTriangles() 更新 triangles （如果你不需要多边形遮罩，可以不用）
+	如果你修改了verts的内容，并且你需要多边形遮罩，
+	那么请调用 updateTriangles() 更新 triangles
 */
 verts = [];
-
-lines = [];
-function updateLines() { lines = vertsToLines(verts); }
 
 triangles = [];
 function updateTriangles() { triangles = vertsTriangulation(verts); }
@@ -34,4 +30,4 @@ rotSpeed = 0;
 	OF_Sub 表示“减框”
 */
 enum OperateFlag { OF_Add, OF_Sub };
-operFlag = OF_Add;
+operFlag = OperateFlag.OF_Add;
