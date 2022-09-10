@@ -1,4 +1,4 @@
-if !surface_exists(surf)
+/*if !surface_exists(surf)
 	surf = surface_create(viewW(), viewH());
 	
 surface_set_target(surf);
@@ -22,7 +22,7 @@ drawPoly(poly2, 3);
 
 draw_set_color(c_fuchsia);
 drawPolyByLines(mixed, 0, 0, 4);
-
+*/
 /*draw_set_color(c_aqua);
 var add = polylineAdd(polyLines1, polyLines2);
 for(var i = 0; i < array_length(add); i++) {
@@ -37,8 +37,8 @@ for(var i = 0; i < array_length(sub); i++) {
 	draw_line_width(line[0][0], line[0][1], line[1][0], line[1][1], 4);
 }*/
 
-
+/*
 draw_set_color(c_white);
 draw_circle(playerX, playerY, 8, false);
-
+*/
 

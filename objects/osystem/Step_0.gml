@@ -1,5 +1,5 @@
 
-poly2.x = 600 + 500 * dsin(poly2.rot);
+/*poly2.x = 600 + 500 * dsin(poly2.rot);
 poly2.y = 220;
 mixed = mixPoly([poly1, poly2]);
 
@@ -10,4 +10,11 @@ if !isPointInsidePolylines(playerX, playerY, mixed) {
 	var pos = limitPoint(playerX, playerY, mixed);
 	playerX = pos[0];
 	playerY = pos[1];
+}*/
+
+if keyboard_check_pressed(vk_space) {
+	ind++;
+	if ind >= array_length(demos)
+		ind = 0;
+	room_goto(demos[ind]);
 }
