@@ -42,8 +42,8 @@
     - 再比如该情况下表示两框相减：
         ```javascript
         ...
-        poly1.operFlag = OF_Add;    // “加框”
-        poly2.operFlag = OF_Sub;    // “减框”
+        poly1.operFlag = OperateFlag.OF_Add;    // “加框”
+        poly2.operFlag = OperateFlag.OF_Sub;    // “减框”
         mixed = mixPoly([poly1, poly2]);    // 两框相减的结果
         ```
     - 如果传入更多的多边形，则按顺序进行运算：
